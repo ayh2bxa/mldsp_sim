@@ -23,16 +23,10 @@ class AF_LMS:
         return self.out
 
 # Recursive Least Square, aka LMS-Newton
-class AF_RLS:
+class AF_RLS(AF_LMS):
     def __init__(self, step_size, filt_ord, primary, reference):
-        self.N = min(len(primary), len(reference))
-        self.W = np.zeros(filt_ord) 
-        self.W[(filt_ord-1)//2] = 1
+        super().__init__(step_size, filt_ord, primary, reference)
         self.u = step_size 
-        self.pri = primary[:self.N]
-        self.ref = reference[:self.N] 
-        self.L = filt_ord
-        self.out = np.zeros(self.N)
         self.R_inv_hat = np.identity(self.L)/np.var(self.ref)
     def process(self, alpha = 1e-4):
         for k in range(self.N):
